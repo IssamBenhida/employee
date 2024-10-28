@@ -50,14 +50,10 @@ public class EmployeeController {
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteEmployee(@PathVariable Long id, Locale locale) {
+    public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
         return employeeRepository.findById(id).map(employee -> {
             employeeRepository.delete(employee);
-            String message = messageSource.getMessage("employee.deleted", null, locale);
-            return ResponseEntity.ok(message);
-        }).orElseGet(() -> {
-            String message = messageSource.getMessage("employee.notfound", null, locale);
-            return ResponseEntity.status(404).body(message);
-        });
+            return ResponseEntity.noContent().<Void>build();
+        }).orElse(ResponseEntity.notFound().build());
     }
 }
