@@ -17,6 +17,7 @@ public class EmployeeController {
 
     @Autowired
     private EmployeeRepository employeeRepository;
+
     @Qualifier("messageSource")
     @Autowired
     private MessageSource messageSource;
@@ -26,8 +27,8 @@ public class EmployeeController {
         return employeeRepository.findAll();
     }
 
-    @GetMapping
-    public Employee getEmployeeById(@RequestParam int id) {
+    @GetMapping("/{id}")
+    public Employee getEmployeeById(@PathVariable int id) {
         return employeeRepository.findById(id);
     }
 
