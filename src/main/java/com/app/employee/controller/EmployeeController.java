@@ -3,10 +3,13 @@ package com.app.employee.controller;
 import com.app.employee.model.Employee;
 import com.app.employee.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 @RequestMapping("/api/employee")
@@ -14,10 +17,18 @@ public class EmployeeController {
 
     @Autowired
     private EmployeeRepository employeeRepository;
+    @Qualifier("messageSource")
+    @Autowired
+    private MessageSource messageSource;
 
     @GetMapping
     public List<Employee> getAllEmployees() {
         return employeeRepository.findAll();
+    }
+
+    @GetMapping
+    public Employee getEmployeeById(@RequestParam int id) {
+        return employeeRepository.findById(id);
     }
 
     @PutMapping("/{id}")
@@ -43,5 +54,4 @@ public class EmployeeController {
             return ResponseEntity.status(404).body(message);
         });
     }
-}
 }
