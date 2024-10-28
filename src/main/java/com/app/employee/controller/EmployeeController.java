@@ -45,6 +45,12 @@ public class EmployeeController {
     @PostMapping
     public ResponseEntity<String> createEmployee(@RequestBody Employee employee, @RequestParam(name = "lang", required = false) String lang) {
         Locale locale = (lang != null) ? Locale.forLanguageTag(lang) : Locale.getDefault();
+
+        if (employeeRepository.existsByEmail(employee.getEmail())) {
+            String message = messageSource.getMessage("email.inuse", null, locale);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(message);
+        }
+
         Employee savedEmployee = employeeRepository.save(employee);
         String message = messageSource.getMessage("employee.created", new Object[]{savedEmployee.getId()}, locale);
         return ResponseEntity.status(HttpStatus.CREATED).body(message);
